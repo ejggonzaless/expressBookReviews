@@ -5,8 +5,8 @@ const regd_users = express.Router();
 
 let users = [];
 
-const isValid = (username) => { //returns boolean
-    //write code to check is the username is valid
+const isValid = (username) => { 
+    return users.some(user => user.username === username);
 }
 
 const authenticatedUser = (username, password) => {
@@ -24,6 +24,12 @@ regd_users.post("/login", (req, res) => {
         return res.status(400).json({
             message: "Username and password are required"
         })
+    }
+
+    if (isValid(username)) {
+        return res.status(409).json({
+            message: "Username already exists"
+        });
     }
 
     if (!authenticatedUser(username, password)) {
